@@ -1,0 +1,29 @@
+stages:
+  - build_confluence
+
+variables:
+  GIT_STRATEGY: fetch
+  DEFAULT_RELEASE_TAG: '7.19.5'  # Add a default release tag in case the variable is not set
+
+.confluence_rules:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      changes:
+        - app/*
+
+build_confluence:
+  stage: build_confluence
+  image:
+    name: gcr.io/kaniko-project/executor:v1.9.0-debug
+    entrypoint: [""]
+  extends: .confluence_rules
+  script:
+    - cd app
+    - RELEASE_TAG=${RELEASE_TAG:-$DEFAULT_RELEASE_TAG}
+    - >
+      /kaniko/executor 
+      --context "${CI_PROJECT_DIR}/app" 
+      --dockerfile "${CI_PROJECT_DIR}/app/Dockerfile"
+      --build-arg RELEASE_TAG=$RELEASE_TAG
+      --destination "${CI_REGISTRY_IMAGE}:${RELEASE_TAG}"
+      --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}"
