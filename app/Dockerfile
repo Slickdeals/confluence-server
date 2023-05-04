@@ -1,6 +1,6 @@
 ARG RELEASE_TAG=latest
 
-FROM atlassian/confluence:${RELEASE_TAG}-adoptopenjdk11
+FROM atlassian/confluence:${RELEASE_TAG}-jdk11
 
 RUN apt-get update && apt-get install wget
 
