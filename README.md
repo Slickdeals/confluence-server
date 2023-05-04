@@ -1,4 +1,4 @@
-# Bitucket Server
+# Confluence Server
 
 This repo is responsible for creating the confluence docker image used for our on-prem confluence.
 
