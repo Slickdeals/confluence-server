@@ -45,4 +45,4 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           build-args: |
-            RELEASE_TAG=${RELEASE_TAG}
+            RELEASE_TAG=${{ vars.RELEASE_TAG }}
