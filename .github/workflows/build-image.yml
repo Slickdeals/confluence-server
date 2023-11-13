@@ -1,4 +1,4 @@
-name: Build Docker Container
+name: Build & Push Docker Image to GitHub
 
 on:
   push:
@@ -37,12 +37,15 @@ jobs:
         uses: docker/metadata-action@v5.0.0
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
+          tags: |
+            type=semver,pattern={{version}}
+  
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: ./app
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             RELEASE_TAG=${{ vars.RELEASE_TAG }}
